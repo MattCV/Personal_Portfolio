@@ -1,16 +1,18 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import About from '@/components/About';
 
 export default function Home() {
   return (
-    <main className="min-h-screen relative">
-        {/* Navbar fija arriba */}
-        <Navbar />
+    <main className="bg-[#050505] min-h-screen">
+      {/* Navbar fija */}
+      <Navbar />
 
-        {/* Contenido principal (Hero) centrado */}
-        <div className="flex items-center justify-center min-h-screen">
-          <Hero />
-        </div>
-      </main>
+      {/* Hero ocupa toda la pantalla inicial */}
+      <Hero />
+
+      {/* About se desplaza naturalmente debajo */}
+      <About />
+    </main>
   );
 }

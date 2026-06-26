@@ -3,10 +3,9 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    /* Ajustamos el padding para que quede más pegado al top y el logo más pequeño */
     <nav className="flex items-center justify-between px-16 py-1 w-full fixed top-0 left-0 z-50">
       
-      {/* Logo más pequeño */}
+      {/* Personal Shark Logo */}
       <div className="w-22 h-22">
         <Image 
             src="/Logo_portfolio.svg" 
@@ -17,7 +16,7 @@ export default function Navbar() {
         />
       </div>
 
-      {/* Menú centrado */}
+      {/* Menú */}
       <div className="flex gap-10 text-sm font-medium text-gray-400">
         <Link href="/" className="text-white border-b border-white pb-1">Home</Link>
         <Link href="#about" className="hover:text-white transition">About</Link>
