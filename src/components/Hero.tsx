@@ -1,11 +1,7 @@
 'use client';
 
 import ScrollIndicator from './Scroll';
-
-/* const Badge3D = dynamic(() => import('@/components/Badge3D'), {
-  ssr: false,
-}); 
-*/
+import Badge from './Badge';
 
 export default function Hero() {
   return (
@@ -30,9 +26,9 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Columna Derecha: El contenedor del componente 3D */}
+        {/* Columna Derecha: El contenedor del componente Badge */}
         <div className="flex justify-center items-center w-full relative">
-           {/* Aquí viviría tu <Badge3D /> */}
+          <Badge />
         </div>
         
       </div>
