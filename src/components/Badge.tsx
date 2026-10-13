@@ -1,82 +1,82 @@
-'use client';
+"use client"
 
-import Image from 'next/image';
+import * as THREE from 'three'
+import { Suspense } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { Environment, Lightformer, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
+import type { GLTF } from 'three-stdlib'
+import type { ObjectMap } from '@react-three/fiber'
 
-export default function Badge() {
+const GLTF_URL = 'https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb'
+
+type BadgeGLTF = GLTF & ObjectMap & {
+  nodes: ObjectMap['nodes'] & {
+    card: THREE.Mesh
+    clip: THREE.Mesh
+    clamp: THREE.Mesh
+  }
+  materials: ObjectMap['materials'] & {
+    metal: THREE.MeshStandardMaterial
+  }
+}
+
+export default function BadgeComponent() {
   return (
-    <div className="flex justify-center items-center">
-      <div 
-        className="relative w-80 rounded-2xl p-8 shadow-2xl border"
-        style={{
-          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
-          borderColor: 'rgba(167, 139, 250, 0.3)',
-        }}
+    <div className="relative h-[min(62vh,440px)] min-h-[320px] w-full touch-none sm:h-[min(72vh,600px)] sm:min-h-[400px]">
+      <Canvas camera={{ position: [0, 0, 13], fov: 25 }} gl={{ alpha: true }}>
+        <ambientLight intensity={Math.PI} />
+        <Suspense fallback={null}>
+          <BadgeModel />
+          <Environment background={false} blur={0.75}>
+            <Lightformer intensity={2} color="white" position={[0, -1, 5]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+            <Lightformer intensity={3} color="white" position={[-1, -1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+            <Lightformer intensity={3} color="white" position={[1, 1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+            <Lightformer intensity={10} color="white" position={[-10, 0, 14]} rotation={[0, Math.PI / 2, Math.PI / 3]} scale={[100, 10, 1]} />
+          </Environment>
+        </Suspense>
+        <OrbitControls
+          enablePan={false}
+          enableZoom={false}
+          minPolarAngle={0.15}
+          maxPolarAngle={Math.PI - 0.15}
+          rotateSpeed={0.7}
+        />
+      </Canvas>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[12%] left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-black/70 px-2.5 py-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white sm:bottom-[22%] sm:px-3 sm:text-[10px]"
       >
-        {/* Decoración de fondo sutil */}
-        <div 
-          className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -z-10"
-          style={{ backgroundColor: 'rgba(167, 139, 250, 0.05)' }}
-        ></div>
-        <div 
-          className="absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl -z-10"
-          style={{ backgroundColor: 'rgba(167, 139, 250, 0.03)' }}
-        ></div>
-        
-        {/* Imagen del perfil */}
-        <div className="flex justify-center mb-6">
-          <div className="relative w-48 h-48">
-            <div 
-              className="relative w-full h-full rounded-full overflow-hidden border-2 shadow-2xl"
-              style={{
-                borderColor: 'rgba(167, 139, 250, 0.6)',
-                boxShadow: '0 0 30px rgba(167, 139, 250, 0.2)',
-              }}
-            >
-              <Image
-                src="/Mateo_profile.webp"
-                alt="Mateo Corrales - Profile"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 200px, 288px"
-                priority
-              />
-            </div>
-            
-            {/* Efecto de brillo */}
-            <div 
-              className="absolute inset-0 rounded-full pointer-events-none"
-              style={{
-                background: 'radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.1) 0%, transparent 60%)',
-              }}
-            ></div>
-          </div>
-        </div>
-        
-        {/* Contenido de texto */}
-        <div className="text-center space-y-1">
-          <h2 
-            className="text-2xl font-bold"
-            style={{ color: '#F2EFFF' }}
-          >
-            Mateo Corrales
-          </h2>
-          <p 
-            className="text-sm uppercase tracking-widest font-semibold"
-            style={{ color: '#A78BFA' }}
-          >
-            Estudiante
-          </p>
-          <p className="text-xs text-gray-400 uppercase tracking-wide">
-            Ingeniería de Software
-          </p>
-          <p 
-            className="text-sm pt-4 font-bold"
-            style={{ color: '#A78BFA' }}
-          >
-            &quot;Aprendiendo, creciendo, creando.&quot;
-          </p>
-        </div>
+        <svg className="h-3.5 w-3.5 animate-[spin_6s_linear_infinite] sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 7v5h-5M4 17v-5h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M5.5 9a7 7 0 0 1 12-2L20 9M4 15l2.5 2a7 7 0 0 0 12-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span>Drag to rotate</span>
       </div>
     </div>
-  );
+  )
+}
+
+function BadgeModel() {
+  const { nodes, materials } = useGLTF(GLTF_URL) as BadgeGLTF
+  const badgeTexture = useTexture('/Badge-Mateo-Texture.jpg', (texture) => {
+    texture.flipY = false
+  })
+
+  return (
+    <group scale={2.75} position={[0, -0.8, -0.05]}>
+      <mesh geometry={nodes.card.geometry}>
+        <meshPhysicalMaterial
+          map={badgeTexture}
+          map-anisotropy={16}
+          clearcoat={1}
+          clearcoatRoughness={0.15}
+          roughness={0.3}
+          metalness={0.5}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
+      <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+    </group>
+  )
 }
