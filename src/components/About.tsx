@@ -8,7 +8,7 @@ export default function About() {
         
         {/* About Me Description */}
         <p className="mb-10 max-w-4xl text-sm leading-relaxed text-gray-400 sm:mb-16 sm:text-base">
-          Software Engineering student in my ninth semester with a strong focus on analysis, organization, and continuous improvement. I have a keen interest in data analysis and database management, areas I have explored independently, including foundational knowledge in Oracle. I am passionate about structuring efficient solutions, from project planning to technical execution. I am a proactive collaborator who enjoys teamwork, adapting to new challenges, and delivering creative solutions with attention to detail.
+          Tenth-semester Software Engineering student at Institución Universitaria Pascual Bravo, with a professional focus oriented towards Full-Stack development and Data Analysis. Highly structured, autonomous, and goal-driven, combining solid front-end expertise (React, Next.js, TypeScript, Tailwind) with analytical skills in databases and Python. Passionate about transforming real world problems into clean, scalable digital solutions while applying agile methodologies and rigorous time management. Currently seeking a professional internship opportunity (Period 2027-1).
         </p>
         
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
@@ -16,11 +16,19 @@ export default function About() {
             <h3 className="mb-5 text-xl font-semibold text-[#818cf8] sm:mb-6">Experience</h3>
             <div className="space-y-6">
               <div>
-                <h4 className="font-semibold text-white">Public Space Assistant</h4>
+                <h4 className="font-semibold text-white">Warehouse Assistant</h4>
+                <p className="text-[#818cf8] text-sm font-mono mb-2">Cueros Vélez</p>
+                <p className="text-gray-500 text-xs mb-3">Dec 2025 – Jan 2026</p>
+                <p className="text-gray-400 leading-relaxed">
+                  Managed inventory control, receiving, sorting, and dispatching of goods, ensuring accuracy and organization across logistics workflows during the high-demand holiday season. Strengthened adaptability, time management under pressure, and cross-functional collaboration.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-white">Holiday Plan Assistant</h4>
                 <p className="text-[#818cf8] text-sm font-mono mb-2">Subsecretaría de Espacio Público</p>
                 <p className="text-gray-500 text-xs mb-3">Dec 2024 – Jan 2025</p>
                 <p className="text-gray-400 leading-relaxed">
-                  Operational management and compliance control in high-demand environments during peak season. Developed key skills in adaptability, assertive communication, and problem-solving under pressure, ensuring regulatory compliance within a dynamic and collaborative team setting.
+                  Regulated and monitored commercial activities in high-traffic urban areas, ensuring compliance with municipal regulations during peak seasonal periods. Strengthened assertive communication, patience, and conflict-resolution skills in complex, high-demand public environments.
                 </p>
               </div>
             </div>
@@ -28,19 +36,20 @@ export default function About() {
           {/* Studies */}
           <div className="flex min-w-0 flex-col gap-6 sm:gap-8">
             <h3 className="text-xl font-semibold text-[#818cf8]">Studies</h3>
-            <div className="relative space-y-8 border-l border-gray-800 pl-6 sm:pl-8">
+            <div className="space-y-8 pl-6 sm:pl-8">
               {/* Software Engineering */}
-              <div>
-                <div className="absolute -left-1.25 top-2 w-2.5 h-2.5 rounded-full bg-[#818cf8]" />
-                <span className="text-[#818cf8] text-xs font-mono">2022 - PRESENT</span>
+              <div className="relative">
+                <div aria-hidden="true" className="absolute -bottom-[43px] -left-6 top-2 w-px bg-gray-800 sm:-left-8" />
+                <div aria-hidden="true" className="absolute -left-[29px] top-[3px] h-2.5 w-2.5 rounded-full bg-[#818cf8] sm:-left-[37px]" />
+                <span className="text-[#818cf8] text-xs font-mono">2022 – PRESENT</span>
                 <h4 className="text-lg font-bold">Software Engineering</h4>
-                <p className="text-gray-400 text-sm">Institución Universitaria Pascual Bravo | 9th semester</p>
-                <p className="text-gray-400 text-sm mt-2">Focus on web development, databases, and software architecture.</p>
+                <p className="text-gray-400 text-sm">Institución Universitaria Pascual Bravo | 10th semester</p>
+                <p className="text-gray-400 text-sm mt-2">Focus on full-stack web development, data analysis, and software architecture.</p>
               </div>
               
               {/* Technical High School Degree */}
-              <div>
-                <div className="absolute -left-1.25 bottom-0 w-2.5 h-2.5 rounded-full bg-gray-700" />
+              <div className="relative">
+                <div aria-hidden="true" className="absolute -left-[29px] top-[6px] h-2.5 w-2.5 rounded-full bg-gray-700 sm:-left-[37px]" />
                 <span className="text-gray-500 text-xs font-mono">Completed 2021</span>
                 <h4 className="text-lg font-bold leading-snug">Technical High School Degree in Informatics</h4>
                 <p className="text-gray-400 text-sm">Institución Educativa Concejo de Medellín</p>
