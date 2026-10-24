@@ -20,10 +20,16 @@ type BadgeGLTF = GLTF & ObjectMap & {
   }
 }
 
-export default function BadgeComponent() {
+export default function BadgeComponent({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="relative h-[min(62vh,440px)] min-h-[320px] w-full touch-none sm:h-[min(72vh,600px)] sm:min-h-[400px]">
-      <Canvas camera={{ position: [0, 0, 13], fov: 25 }} gl={{ alpha: true }}>
+    <div
+      className={`relative touch-none ${
+        compact
+          ? 'h-52 w-52 sm:h-60 sm:w-60'
+          : 'h-[min(62vh,440px)] min-h-[320px] w-full sm:h-[min(72vh,600px)] sm:min-h-[400px]'
+      }`}
+    >
+      <Canvas camera={{ position: [0, 0, compact ? 9 : 13], fov: compact ? 30 : 25 }} gl={{ alpha: true }}>
         <ambientLight intensity={Math.PI} />
         <Suspense fallback={null}>
           <BadgeModel />
@@ -44,7 +50,9 @@ export default function BadgeComponent() {
       </Canvas>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[12%] left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-black/70 px-2.5 py-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white sm:bottom-[22%] sm:px-3 sm:text-[10px]"
+        className={`pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-black/70 px-2.5 py-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white sm:px-3 sm:text-[10px] ${
+          compact ? 'hidden' : 'bottom-[12%] sm:bottom-[22%]'
+        }`}
       >
         <svg className="h-3.5 w-3.5 animate-[spin_6s_linear_infinite] sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M20 7v5h-5M4 17v-5h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

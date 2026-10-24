@@ -19,7 +19,7 @@ export default function Navbar() {
       {/* Menú */}
       <div className="col-span-2 row-start-2 flex justify-center gap-5 text-xs font-medium text-gray-400 sm:order-none sm:col-span-1 sm:row-auto sm:gap-6 sm:text-sm lg:gap-10">
         <Link href="/" className="text-white border-b border-white pb-1">Home</Link>
-        <Link href="#about" className="hover:text-white transition">About</Link>
+        <Link href="#about" className="hover:text-white transition">About Me</Link>
         <Link href="#projects" className="hover:text-white transition">Projects</Link>
         <Link href="#contact" className="hover:text-white transition">Contact</Link>
       </div>
