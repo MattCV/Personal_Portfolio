@@ -41,7 +41,7 @@ export default function Footer() {
         </div>
 
         <p className="text-center text-xs text-gray-500">
-          Inspirado en el concepto de Badge 3D interactivo de{' '}
+          Inspired by Vercel&apos;s interactive 3D badge concept{' '}
           <a
             className="text-gray-400 underline decoration-white/20 underline-offset-4 transition-colors hover:text-[#a5adff] hover:decoration-[#818cf8]"
             href="https://vercel.com/blog/building-an-interactive-3d-event-badge-with-react-three-fiber"
@@ -54,7 +54,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto max-w-6xl border-t border-white/[0.07] py-4 text-center text-xs text-gray-500">
-        © 2026 Mateo Corrales Vinasco. Todos los derechos reservados.
+        © 2026 Mateo Corrales Vinasco. All rights reserved.
       </div>
     </footer>
   );

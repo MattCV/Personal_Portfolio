@@ -3,10 +3,10 @@
 import { FormEvent, useState } from 'react';
 
 const contactReasons = [
-  'Oportunidad laboral',
-  'Proyecto freelance',
-  'Colaboración',
-  'Otra duda',
+  'Job opportunity',
+  'Freelance project',
+  'Collaboration',
+  'Other inquiry',
 ];
 
 const initialForm = {
@@ -29,7 +29,7 @@ export default function Contact() {
 
     const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
     if (!formId) {
-      setError('El formulario de contacto aún no está configurado. Inténtalo de nuevo más tarde.');
+      setError('The contact form is not configured yet. Please try again later.');
       return;
     }
 
@@ -45,12 +45,12 @@ export default function Contact() {
         body: JSON.stringify({
           ...form,
           reason,
-          subject: `Nuevo mensaje de contacto: ${reason}`,
+          subject: `Portfolio Contact: ${reason}`,
         }),
       });
 
       if (!response.ok) {
-        setError('No se pudo enviar el mensaje. Inténtalo de nuevo en unos minutos.');
+        setError('Your message could not be sent. Please try again in a few minutes.');
         return;
       }
 
@@ -58,7 +58,7 @@ export default function Contact() {
       setReason(contactReasons[0]);
       setIsSent(true);
     } catch {
-      setError('No se pudo enviar el mensaje. Revisa tu conexión e inténtalo de nuevo.');
+      setError('Your message could not be sent. Check your connection and try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -75,14 +75,14 @@ export default function Contact() {
           Contact
         </h2>
         <p className="mb-8 max-w-2xl text-sm leading-relaxed text-gray-400 sm:mb-10 sm:text-base">
-          ¿Tienes una duda, una propuesta o quieres trabajar conmigo? Déjame un mensaje y te
-          responderé en un plazo de 24 a 48 horas.
+          Have a question, a proposal, or want to work together? Send me a message and I&apos;ll get
+          back to you within 24 to 48 hours.
         </p>
 
         <div className="rounded-2xl border border-white/10 bg-[#08090b]/90 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:p-8 md:p-10">
           <form className="space-y-7" onSubmit={handleSubmit}>
             <fieldset>
-              <legend className={labelClassName}>Motivo</legend>
+              <legend className={labelClassName}>Reason</legend>
               <div className="mt-3 flex flex-wrap gap-2">
                 {contactReasons.map((option) => {
                   const isSelected = reason === option;
@@ -108,26 +108,26 @@ export default function Contact() {
 
             <div className="grid gap-5 sm:grid-cols-2">
               <label className={labelClassName}>
-                Nombre
+                Name
                 <input
                   autoComplete="name"
                   className={fieldClassName}
                   name="name"
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
-                  placeholder="Tu nombre"
+                  placeholder="Your name"
                   required
                   value={form.name}
                 />
               </label>
 
               <label className={labelClassName}>
-                Correo
+                Email
                 <input
                   autoComplete="email"
                   className={fieldClassName}
                   name="email"
                   onChange={(event) => setForm({ ...form, email: event.target.value })}
-                  placeholder="tu@correo.com"
+                  placeholder="you@example.com"
                   required
                   type="email"
                   value={form.email}
@@ -136,18 +136,18 @@ export default function Contact() {
             </div>
 
             <label className={`block ${labelClassName}`}>
-              Asunto
+              Subject
               <input
                 aria-readonly="true"
                 className={`${fieldClassName} cursor-not-allowed text-gray-400`}
                 readOnly
-                value={`Nuevo mensaje de contacto: ${reason}`}
+                value={`Portfolio Contact: ${reason}`}
               />
             </label>
 
             <div>
               <label className={labelClassName} htmlFor="contact-message">
-                Mensaje
+                Message
               </label>
               <textarea
                 className={`${fieldClassName} min-h-36 resize-y`}
@@ -157,7 +157,7 @@ export default function Contact() {
                 onChange={(event) =>
                   setForm({ ...form, message: event.target.value.slice(0, 500) })
                 }
-                placeholder="Cuéntame en qué puedo ayudarte..."
+                placeholder="Tell me how I can help..."
                 required
                 value={form.message}
               />
@@ -177,25 +177,17 @@ export default function Contact() {
                 className="rounded-xl border border-[#818cf8]/25 bg-[#818cf8]/10 px-4 py-4 text-sm leading-relaxed text-indigo-100"
                 role="status"
               >
-                ¡Correo enviado correctamente! 🚀 Gracias por ponerte en contacto. He recibido tu
-                mensaje y te responderé en un plazo de 24 a 48 horas.
+                Message sent successfully! 🚀 Thanks for reaching out. I&apos;ve received your
+                message and will get back to you within 24 to 48 hours.
               </p>
             )}
 
             <button
-              className="group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-[#6875e8] to-[#818cf8] px-6 py-4 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(104,117,232,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_36px_rgba(104,117,232,0.36)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a5adff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#08090b] disabled:cursor-wait disabled:opacity-70"
+              className="flex min-h-10 w-full max-w-[180px] items-center justify-center rounded-full border border-[#818cf8] bg-[#818cf8]/10 px-5 py-2 text-xs font-medium text-indigo-100 transition-colors duration-200 hover:bg-[#818cf8]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a5adff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#08090b] disabled:cursor-wait disabled:opacity-70"
               disabled={isSubmitting}
               type="submit"
             >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              <span className="relative">
-                {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}
-              </span>
-              {!isSubmitting && (
-                <span aria-hidden="true" className="relative transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              )}
+              {isSubmitting ? 'Sending...' : 'Send message'}
             </button>
           </form>
         </div>

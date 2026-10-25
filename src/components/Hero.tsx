@@ -5,7 +5,7 @@ import Badge from './Badge';
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center px-5 pb-24 pt-28 sm:px-10 sm:py-28 lg:px-16">
+    <section id="home" className="relative flex min-h-screen w-full items-center justify-center px-5 pb-24 pt-28 sm:px-10 sm:py-28 lg:px-16">
       
       {/* Contenedor Grid de 2 columnas */}
       <div className="grid w-full max-w-6xl grid-cols-1 items-center gap-2 sm:gap-6 md:grid-cols-2 md:gap-10 lg:gap-16">

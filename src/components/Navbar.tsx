@@ -1,37 +1,114 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+const navigationLinks = [
+  { label: 'Home', id: 'home' },
+  { label: 'About Me', id: 'about' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Contact', id: 'contact' },
+];
 
 export default function Navbar() {
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+
+  useEffect(() => {
+    const updateScrollState = () => {
+      const scrollY = window.scrollY;
+      setHasScrolled(scrollY > 20);
+
+      if (scrollY <= 20) {
+        setActiveSection('home');
+      }
+    };
+
+    updateScrollState();
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+
+    return () => window.removeEventListener('scroll', updateScrollState);
+  }, []);
+
+  useEffect(() => {
+    const sections = navigationLinks
+      .map(({ id }) => document.getElementById(id))
+      .filter((section): section is HTMLElement => section !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: '-35% 0px -55% 0px' },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <nav className="fixed left-0 top-0 z-50 grid w-full grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 px-4 py-2 sm:flex sm:h-24 sm:justify-between sm:px-8 sm:py-0 lg:px-16">
-      
-      {/* Personal Shark Logo */}
-      <div className="h-12 w-12 shrink-0 sm:h-16 sm:w-16">
-        <Image 
-            src="/Logo_portfolio.svg" 
-            alt="Personal Shark Logo" 
-            width={40} 
-            height={40} 
-            className="w-full h-full object-contain"
-        />
+    <nav
+      aria-label="Main navigation"
+      className={`fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,backdrop-filter] duration-300 ${
+        hasScrolled ? 'bg-[#0f1115]/65 backdrop-blur-sm' : 'bg-transparent'
+      }`}
+    >
+      <div className="mx-auto grid max-w-[1440px] grid-cols-[auto_1fr_auto] items-center gap-x-4 px-5 py-1 sm:px-8 md:h-16 md:px-12 lg:px-16">
+        <Link href="#home" aria-label="Go to home" className="h-12 w-12 shrink-0 sm:h-16 sm:w-16">
+          <Image
+            src="/Logo_portfolio.svg"
+            alt="Personal Shark Logo"
+            width={64}
+            height={64}
+            className="h-full w-full object-contain"
+            priority
+          />
+        </Link>
+
+        <div className="col-span-3 row-start-2 flex items-center justify-center gap-6 pb-1 text-xs font-medium text-gray-400 sm:gap-8 sm:text-sm md:col-span-1 md:col-start-2 md:row-start-1 md:pb-0 lg:gap-10">
+          {navigationLinks.map(({ label, id }) => {
+            const isActive = activeSection === id;
+
+            return (
+              <Link
+                key={id}
+                href={`#${id}`}
+                aria-current={isActive ? 'location' : undefined}
+                className={`relative py-1 transition-colors duration-200 after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-full after:-translate-x-1/2 after:bg-white/75 after:transition-transform after:duration-300 after:content-[''] hover:text-white hover:after:scale-x-100 focus-visible:text-white focus-visible:outline-none focus-visible:after:scale-x-100 ${
+                  isActive ? 'text-white after:scale-x-100' : 'after:scale-x-0'
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center justify-self-end gap-3 text-[10px] sm:gap-5 sm:text-xs">
+          <span
+            aria-label="Available languages: English and Spanish"
+            className="whitespace-nowrap font-medium tracking-wide text-gray-400"
+          >
+            <span className="text-white">EN</span>
+            <span className="px-1.5 text-gray-600">/</span>
+            <span>ES</span>
+          </span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap font-medium tracking-[0.08em] text-emerald-400 sm:gap-2">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-400 sm:h-2 sm:w-2" />
+            AVAILABLE
+          </span>
+        </div>
       </div>
 
-      {/* Menú */}
-      <div className="col-span-2 row-start-2 flex justify-center gap-5 text-xs font-medium text-gray-400 sm:order-none sm:col-span-1 sm:row-auto sm:gap-6 sm:text-sm lg:gap-10">
-        <Link href="/" className="text-white border-b border-white pb-1">Home</Link>
-        <Link href="#about" className="hover:text-white transition">About Me</Link>
-        <Link href="#projects" className="hover:text-white transition">Projects</Link>
-        <Link href="#contact" className="hover:text-white transition">Contact</Link>
-      </div>
-
-      {/* Idioma y Disponibilidad */}
-      <div className="flex items-center justify-self-end gap-2 text-[10px] text-gray-400 sm:gap-4 sm:text-xs lg:gap-6">
-        <span className="hidden cursor-pointer hover:text-white sm:inline">EN / ES</span>
-        <span className="flex items-center gap-1.5 whitespace-nowrap text-[#00ff88] sm:gap-2">
-          <span className="w-2 h-2 bg-[#00ff88] rounded-full animate-pulse"></span>
-          AVAILABLE
-        </span>
-      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-slate-300/20 to-transparent"
+      />
     </nav>
   );
 }
