@@ -3,17 +3,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useLanguage } from './LanguageProvider';
 
-const navigationLinks = [
-  { label: 'Home', id: 'home' },
-  { label: 'About Me', id: 'about' },
-  { label: 'Projects', id: 'projects' },
-  { label: 'Contact', id: 'contact' },
-];
+const navigationSectionIds = ['home', 'about', 'projects', 'contact'];
 
 export default function Navbar() {
+  const { language, setLanguage, copy } = useLanguage();
   const [hasScrolled, setHasScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const navigationLinks = [
+    { label: copy.nav.home, id: 'home' },
+    { label: copy.nav.about, id: 'about' },
+    { label: copy.nav.projects, id: 'projects' },
+    { label: copy.nav.contact, id: 'contact' },
+  ];
 
   useEffect(() => {
     const updateScrollState = () => {
@@ -32,8 +35,8 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = navigationLinks
-      .map(({ id }) => document.getElementById(id))
+    const sections = navigationSectionIds
+      .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null);
 
     const observer = new IntersectionObserver(
@@ -53,16 +56,16 @@ export default function Navbar() {
 
   return (
     <nav
-      aria-label="Main navigation"
+      aria-label={copy.nav.ariaLabel}
       className={`fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,backdrop-filter] duration-300 ${
         hasScrolled ? 'bg-[#0f1115]/65 backdrop-blur-sm' : 'bg-transparent'
       }`}
     >
       <div className="mx-auto grid max-w-[1440px] grid-cols-[auto_1fr_auto] items-center gap-x-4 px-5 py-1 sm:px-8 md:h-16 md:px-12 lg:px-16">
-        <Link href="#home" aria-label="Go to home" className="h-12 w-12 shrink-0 sm:h-16 sm:w-16">
+        <Link href="#home" aria-label={copy.nav.home} className="h-12 w-12 shrink-0 sm:h-16 sm:w-16">
           <Image
             src="/Logo_portfolio.svg"
-            alt="Personal Shark Logo"
+            alt={copy.nav.logo}
             width={64}
             height={64}
             className="h-full w-full object-contain"
@@ -90,17 +93,34 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center justify-self-end gap-3 text-[10px] sm:gap-5 sm:text-xs">
-          <span
-            aria-label="Available languages: English and Spanish"
-            className="whitespace-nowrap font-medium tracking-wide text-gray-400"
-          >
-            <span className="text-white">EN</span>
-            <span className="px-1.5 text-gray-600">/</span>
-            <span>ES</span>
-          </span>
+          <div aria-label={copy.nav.chooseLanguage} className="flex items-center whitespace-nowrap font-medium tracking-wide">
+            <button
+              type="button"
+              aria-label={copy.nav.english}
+              aria-pressed={language === 'en'}
+              onClick={() => setLanguage('en')}
+              className={`transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#818cf8] ${
+                language === 'en' ? 'text-white' : 'text-gray-500'
+              }`}
+            >
+              EN
+            </button>
+            <span aria-hidden="true" className="px-1.5 text-gray-600">/</span>
+            <button
+              type="button"
+              aria-label={copy.nav.spanish}
+              aria-pressed={language === 'es'}
+              onClick={() => setLanguage('es')}
+              className={`transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#818cf8] ${
+                language === 'es' ? 'text-white' : 'text-gray-500'
+              }`}
+            >
+              ES
+            </button>
+          </div>
           <span className="flex items-center gap-1.5 whitespace-nowrap font-medium tracking-[0.08em] text-emerald-400 sm:gap-2">
             <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-400 sm:h-2 sm:w-2" />
-            AVAILABLE
+            {copy.nav.available}
           </span>
         </div>
       </div>

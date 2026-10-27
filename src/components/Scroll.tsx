@@ -1,8 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useLanguage } from './LanguageProvider';
 
 export default function ScrollIndicator() {
+  const { copy } = useLanguage();
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -12,7 +15,7 @@ export default function ScrollIndicator() {
       onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
     >
       <span className="text-gray-400 text-[10px] uppercase font-mono tracking-widest mb-1 group-hover:text-gray-300 transition-colors">
-        Scroll
+        {copy.hero.scroll}
       </span>
       <motion.div
         animate={{ y: [0, 8, 0] }}

@@ -4,10 +4,11 @@ import About from '@/components/About';
 import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import { LanguageProvider } from '@/components/LanguageProvider';
 
 export default function Home() {
   return (
-    <>
+    <LanguageProvider>
       <main className="bg-[#050505] min-h-screen">
         {/* Navbar fija */}
         <Navbar />
@@ -22,6 +23,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </LanguageProvider>
   );
 }

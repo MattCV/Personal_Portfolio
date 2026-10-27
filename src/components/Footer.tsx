@@ -1,3 +1,7 @@
+'use client';
+
+import { useLanguage } from './LanguageProvider';
+
 const socialLinks = [
   {
     label: 'GitHub',
@@ -20,6 +24,8 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const { copy } = useLanguage();
+
   return (
     <footer className="border-t border-white/10 bg-[#050505] px-5 text-white sm:px-8 lg:px-16">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 py-6 sm:flex-row">
@@ -41,7 +47,7 @@ export default function Footer() {
         </div>
 
         <p className="text-center text-xs text-gray-500">
-          Inspired by Vercel&apos;s interactive 3D badge concept{' '}
+          {copy.footer.inspired}{' '}
           <a
             className="text-gray-400 underline decoration-white/20 underline-offset-4 transition-colors hover:text-[#a5adff] hover:decoration-[#818cf8]"
             href="https://vercel.com/blog/building-an-interactive-3d-event-badge-with-react-three-fiber"
@@ -54,7 +60,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto max-w-6xl border-t border-white/[0.07] py-4 text-center text-xs text-gray-500">
-        © 2026 Mateo Corrales Vinasco. All rights reserved.
+        © 2026 Mateo Corrales Vinasco. {copy.footer.rights}
       </div>
     </footer>
   );

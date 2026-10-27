@@ -6,6 +6,7 @@ import { Canvas } from '@react-three/fiber'
 import { Environment, Lightformer, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
 import type { GLTF } from 'three-stdlib'
 import type { ObjectMap } from '@react-three/fiber'
+import { useLanguage } from './LanguageProvider'
 
 const GLTF_URL = 'https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb'
 
@@ -21,6 +22,8 @@ type BadgeGLTF = GLTF & ObjectMap & {
 }
 
 export default function BadgeComponent({ compact = false }: { compact?: boolean }) {
+  const { copy } = useLanguage()
+
   return (
     <div
       className={`relative touch-none ${
@@ -50,15 +53,15 @@ export default function BadgeComponent({ compact = false }: { compact?: boolean 
       </Canvas>
       <div
         aria-hidden="true"
-        className={`pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-black/70 px-2.5 py-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white sm:px-3 sm:text-[10px] ${
-          compact ? 'hidden' : 'bottom-[12%] sm:bottom-[22%]'
+        className={`pointer-events-none absolute left-1/2 flex h-8 w-40 -translate-x-1/2 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-white/20 bg-black/70 text-[9px] font-medium uppercase tracking-[0.14em] text-white sm:text-[10px] ${
+          compact ? 'hidden' : 'bottom-[12%] sm:bottom-[23.2%]'
         }`}
       >
         <svg className="h-3.5 w-3.5 animate-[spin_6s_linear_infinite] sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M20 7v5h-5M4 17v-5h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M5.5 9a7 7 0 0 1 12-2L20 9M4 15l2.5 2a7 7 0 0 0 12-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <span>Drag to rotate</span>
+        <span>{copy.hero.dragToRotate}</span>
       </div>
     </div>
   )

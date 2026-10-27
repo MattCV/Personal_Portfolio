@@ -1,13 +1,11 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import { useLanguage } from './LanguageProvider';
 
-const contactReasons = [
-  'Job opportunity',
-  'Freelance project',
-  'Collaboration',
-  'Other inquiry',
-];
+const reasonKeys = ['job', 'freelance', 'collaboration', 'other'] as const;
+type ContactReason = (typeof reasonKeys)[number];
+type ContactError = 'notConfigured' | 'sendFailed' | 'connectionFailed';
 
 const initialForm = {
   name: '',
@@ -16,20 +14,21 @@ const initialForm = {
 };
 
 export default function Contact() {
-  const [reason, setReason] = useState(contactReasons[0]);
+  const { copy } = useLanguage();
+  const [reason, setReason] = useState<ContactReason>('job');
   const [form, setForm] = useState(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<ContactError | null>(null);
   const [isSent, setIsSent] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError('');
+    setError(null);
     setIsSent(false);
 
     const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
     if (!formId) {
-      setError('The contact form is not configured yet. Please try again later.');
+      setError('notConfigured');
       return;
     }
 
@@ -44,21 +43,21 @@ export default function Contact() {
         },
         body: JSON.stringify({
           ...form,
-          reason,
-          subject: `Portfolio Contact: ${reason}`,
+          reason: copy.contact.reasons[reason],
+          subject: `${copy.contact.subjectPrefix}: ${copy.contact.reasons[reason]}`,
         }),
       });
 
       if (!response.ok) {
-        setError('Your message could not be sent. Please try again in a few minutes.');
+        setError('sendFailed');
         return;
       }
 
       setForm(initialForm);
-      setReason(contactReasons[0]);
+      setReason('job');
       setIsSent(true);
     } catch {
-      setError('Your message could not be sent. Check your connection and try again.');
+      setError('connectionFailed');
     } finally {
       setIsSubmitting(false);
     }
@@ -72,34 +71,33 @@ export default function Contact() {
     <section id="contact" className="px-5 py-16 text-white sm:px-8 sm:py-20 lg:px-16 lg:py-24">
       <div className="mx-auto max-w-4xl">
         <h2 className="mb-4 border-l-4 border-[#818cf8] pl-4 text-2xl font-bold sm:text-3xl">
-          Contact
+          {copy.contact.title}
         </h2>
         <p className="mb-8 max-w-2xl text-sm leading-relaxed text-gray-400 sm:mb-10 sm:text-base">
-          Have a question, a proposal, or want to work together? Send me a message and I&apos;ll get
-          back to you within 24 to 48 hours.
+          {copy.contact.description}
         </p>
 
         <div className="rounded-2xl border border-white/10 bg-[#08090b]/90 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:p-8 md:p-10">
           <form className="space-y-7" onSubmit={handleSubmit}>
             <fieldset>
-              <legend className={labelClassName}>Reason</legend>
+              <legend className={labelClassName}>{copy.contact.reason}</legend>
               <div className="mt-3 flex flex-wrap gap-2">
-                {contactReasons.map((option) => {
-                  const isSelected = reason === option;
+                {reasonKeys.map((reasonKey) => {
+                  const isSelected = reason === reasonKey;
 
                   return (
                     <button
-                      key={option}
+                      key={reasonKey}
                       type="button"
                       aria-pressed={isSelected}
-                      onClick={() => setReason(option)}
+                      onClick={() => setReason(reasonKey)}
                       className={`rounded-full border px-4 py-2 text-sm transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#818cf8] ${
                         isSelected
                           ? 'border-[#818cf8] bg-[#818cf8]/10 text-white shadow-[0_0_20px_rgba(129,140,248,0.12)]'
                           : 'border-white/10 text-gray-400 hover:border-white/25 hover:text-white'
                       }`}
                     >
-                      {option}
+                      {copy.contact.reasons[reasonKey]}
                     </button>
                   );
                 })}
@@ -108,26 +106,26 @@ export default function Contact() {
 
             <div className="grid gap-5 sm:grid-cols-2">
               <label className={labelClassName}>
-                Name
+                {copy.contact.name}
                 <input
                   autoComplete="name"
                   className={fieldClassName}
                   name="name"
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
-                  placeholder="Your name"
+                  placeholder={copy.contact.namePlaceholder}
                   required
                   value={form.name}
                 />
               </label>
 
               <label className={labelClassName}>
-                Email
+                {copy.contact.email}
                 <input
                   autoComplete="email"
                   className={fieldClassName}
                   name="email"
                   onChange={(event) => setForm({ ...form, email: event.target.value })}
-                  placeholder="you@example.com"
+                  placeholder={copy.contact.emailPlaceholder}
                   required
                   type="email"
                   value={form.email}
@@ -136,18 +134,18 @@ export default function Contact() {
             </div>
 
             <label className={`block ${labelClassName}`}>
-              Subject
+              {copy.contact.subject}
               <input
                 aria-readonly="true"
                 className={`${fieldClassName} cursor-not-allowed text-gray-400`}
                 readOnly
-                value={`Portfolio Contact: ${reason}`}
+                value={`${copy.contact.subjectPrefix}: ${copy.contact.reasons[reason]}`}
               />
             </label>
 
             <div>
               <label className={labelClassName} htmlFor="contact-message">
-                Message
+                {copy.contact.message}
               </label>
               <textarea
                 className={`${fieldClassName} min-h-36 resize-y`}
@@ -157,7 +155,7 @@ export default function Contact() {
                 onChange={(event) =>
                   setForm({ ...form, message: event.target.value.slice(0, 500) })
                 }
-                placeholder="Tell me how I can help..."
+                placeholder={copy.contact.messagePlaceholder}
                 required
                 value={form.message}
               />
@@ -168,7 +166,7 @@ export default function Contact() {
 
             {error && (
               <p className="rounded-xl border border-red-400/20 bg-red-400/5 px-4 py-3 text-sm text-red-200" role="alert">
-                {error}
+                {copy.contact[error]}
               </p>
             )}
 
@@ -177,8 +175,7 @@ export default function Contact() {
                 className="rounded-xl border border-[#818cf8]/25 bg-[#818cf8]/10 px-4 py-4 text-sm leading-relaxed text-indigo-100"
                 role="status"
               >
-                Message sent successfully! 🚀 Thanks for reaching out. I&apos;ve received your
-                message and will get back to you within 24 to 48 hours.
+                {copy.contact.sent}
               </p>
             )}
 
@@ -187,7 +184,7 @@ export default function Contact() {
               disabled={isSubmitting}
               type="submit"
             >
-              {isSubmitting ? 'Sending...' : 'Send message'}
+              {isSubmitting ? copy.contact.sending : copy.contact.submit}
             </button>
           </form>
         </div>
